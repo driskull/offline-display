@@ -16,9 +16,6 @@ define([
       this.defaults = options;
       // create offline manager
       this.offlineFeaturesManager = O.esri.Edit.OfflineFeaturesManager();
-      if(this.defaults.proxy){
-        this.offlineFeaturesManager.proxyPath = this.defaults.proxy;
-      }
       // enable offline attachments
       //this.offlineFeaturesManager.initAttachments();
       // once layer is loaded
