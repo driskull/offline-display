@@ -2,18 +2,12 @@
 define([
     "dojo/_base/declare",
     "dojo/_base/lang",
-    "dojo/string",
     "dojo/on",
-    "dojo/dom",
-    "esri/graphic",
     "offline/offline-edit-min"
 ], function (
   declare,
   lang,
-  string,
-  on,
-  dom,
-  Graphic
+  on
 ) {
   return declare(null, {
     // create class
