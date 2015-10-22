@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <title></title>
+  <link rel="stylesheet" href="//js.arcgis.com/3.14/dijit/themes/claro/claro.css">
+  <link rel="stylesheet" href="//js.arcgis.com/3.14/esri/css/esri.css">
+  <style type="text/css">
+    body {
+      margin: 40px;
+      padding: 20px;
+    }
+    
+    .container {
+      position: relative;
+      padding: 10px;
+      border: 1px solid #eee;
+      -webkit-border-radius: 3px;
+      border-radius: 3px;
+    }
+    
+    #map {
+      width: 100%;
+      height: 500px;
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="offline/offline.min.js"></script>
+  <script type="text/javascript" src="offline/IndexedDBShim.min.js"></script>
+</head>
+
+<body class="claro">
+  <div class="container">
+    <div id="map" class="map">
+    </div>
+    </p>
+  </div>
+  <script type="text/javascript">
+    var package_path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+    var dojoConfig = {
+      // The locationPath logic below may look confusing but all its doing is
+      // enabling us to load the api from a CDN and load local modules from the correct location.
+      packages: [{
+        name: "offline",
+        location: package_path + '/offline'
+            }]
+    };
+    // Have to handle a locale parameter before dojo is loaded
+    if (location.search.match(/locale=([\w-]+)/)) {
+      dojoConfig.locale = RegExp.$1;
+    }
+  </script>
+  <script src="//js.arcgis.com/3.14"></script>
+  <script type="text/javascript">
+    var map;
+    require([
+      "dojo/on",
+      "dojo/dom-construct",
+      "dojo/_base/lang",
+      "offline/OfflineSupport",
+      "esri/arcgis/utils"
+    ], function (
+      on,
+      domConstruct,
+      lang,
+      OfflineSupport,
+      arcgisUtils
+    ) {
+
+
+      function getLayer() {
+        var layer = map.getLayer("GeoForm_Survey_v11_live_8620");
+        // create offline layer
+        var os = new OfflineSupport({
+          layer: layer
+        });
+      }
+
+      /* Create webmap */
+
+      arcgisUtils.createMap('0c5cb13c4fc54b28bb26a125221ed96f', "map", {
+        mapOptions: {
+          //Optionally define additional map config here for example you can 
+          //turn the slider off, display info windows, disable wraparound 180, slider position and more. 
+        }
+      }).then(lang.hitch(this, function (response) {
+        map = response.map;
+        if (map.loaded) {
+          getLayer();
+        } else {
+          on(map, "load", function () {
+
+            getLayer();
+          });
+        }
+      }));
+    });
+  </script>
+</body>
+
+</html>
